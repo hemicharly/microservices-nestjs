@@ -1,0 +1,22 @@
+services:
+  microservice-a:
+    container_name: microservice-a
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bhut/microservice-a:latest
+    user: node
+    environment:
+      NODE_ENV: development
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./app:/app
+    networks:
+      - microservice_network
+    command: [ "yarn", "dev" ]
+
+networks:
+  microservice_network:
