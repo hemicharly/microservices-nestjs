@@ -11,21 +11,23 @@ export class MicroservicesErrorsInterceptor implements NestInterceptor {
     return next.handle().pipe(
       catchError((err) => {
         if (err instanceof HttpException) {
-          return throwError(err);
+          return throwError(() => err);
+        }
+
+        if (err.statusCode && err.errors) {
+          return throwError(() => new CustomMicroserviceException(err.statusCode, err?.errors));
         }
 
         this.logger.error(err);
+
         return throwError(
           () =>
-            new CustomMicroserviceException(
-              err?.statusCode || 500,
-              err?.errors || [
-                {
-                  code: '500',
-                  message: 'Internal Server Error',
-                },
-              ],
-            ),
+            new CustomMicroserviceException(500, [
+              {
+                code: '500',
+                message: 'Internal Server Error',
+              },
+            ]),
         );
       }),
     );
