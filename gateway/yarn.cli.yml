@@ -1,0 +1,10 @@
+services:
+  yarn:
+    image: bhut/node-development:latest
+    working_dir: /app
+    user: node
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./app:/app
+    entrypoint: yarn

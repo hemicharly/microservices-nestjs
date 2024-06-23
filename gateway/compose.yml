@@ -1,0 +1,22 @@
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: bhut/gateway:latest
+    user: node
+    environment:
+      NODE_ENV: development
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/app
+    networks:
+      - microservice_network
+    command: [ "yarn", "dev" ]
+
+networks:
+  microservice_network:
